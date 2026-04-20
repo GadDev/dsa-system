@@ -15,7 +15,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "DSA Trainer — Pattern-Based Mastery",
-  description: "A 30-day structured system to master Data Structures & Algorithms through pattern-based learning.",
+  description:
+    "A 35-day structured system to master Data Structures & Algorithms through pattern-based learning.",
 };
 
 export default function RootLayout({
@@ -35,4 +36,3 @@ export default function RootLayout({
     </html>
   );
 }
-

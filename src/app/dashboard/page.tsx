@@ -1,15 +1,13 @@
 "use client";
 
-import { useMemo } from "react";
 import { motion } from "framer-motion";
-import { Flame, Target, Trophy, TrendingUp } from "lucide-react";
-import { useProgressStore } from "@/store/useProgressStore";
-import { roadmap, totalProblems, weekLabels } from "@/data/roadmap";
+import { Flame, Target, TrendingUp, Trophy } from "lucide-react";
+import { useMemo } from "react";
 import { DayCard } from "@/components/dsa/DayCard";
 import { ProgressBar } from "@/components/dsa/ProgressBar";
+import { roadmap, totalDays, totalProblems, weekLabels } from "@/data/roadmap";
 import { cn, getWeekColor } from "@/lib/utils";
-
-const CURRENT_DAY = 1; // In a real app derive from user's first incomplete day
+import { useProgressStore } from "@/store/useProgressStore";
 
 export default function DashboardPage() {
   const { getTotalCompleted, getDayProgress } = useProgressStore();
@@ -20,8 +18,12 @@ export default function DashboardPage() {
   const weeks = useMemo(() => {
     const map = new Map<number, typeof roadmap>();
     for (const day of roadmap) {
-      if (!map.has(day.week)) map.set(day.week, []);
-      map.get(day.week)!.push(day);
+      let days = map.get(day.week);
+      if (!days) {
+        days = [];
+        map.set(day.week, days);
+      }
+      days.push(day);
     }
     return Array.from(map.entries()).map(([week, days]) => ({ week, days }));
   }, []);
@@ -33,7 +35,7 @@ export default function DashboardPage() {
       const progress = getDayProgress(ids);
       if (progress < 100) return day.day;
     }
-    return 30;
+    return totalDays;
   }, [getDayProgress]);
 
   const stats = [
@@ -56,7 +58,7 @@ export default function DashboardPage() {
     {
       label: "Current Day",
       value: currentDay,
-      suffix: "/ 30",
+      suffix: `/ ${totalDays}`,
       icon: Flame,
       color: "text-amber-400",
       bg: "bg-amber-400/10",
@@ -66,7 +68,7 @@ export default function DashboardPage() {
       value: roadmap.filter(
         (d) => getDayProgress(d.problems.map((p) => p.id)) === 100,
       ).length,
-      suffix: "/ 30",
+      suffix: `/ ${totalDays}`,
       icon: Trophy,
       color: "text-emerald-400",
       bg: "bg-emerald-400/10",
@@ -85,7 +87,7 @@ export default function DashboardPage() {
           DSA Roadmap
         </h1>
         <p className="mt-1 text-sm text-[#9AA4AF]">
-          30 days · 5 weeks · pattern-based mastery
+          {totalDays} days · 5 weeks · pattern-based mastery
         </p>
       </motion.div>
 
@@ -96,7 +98,7 @@ export default function DashboardPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.08 }}
       >
-        {stats.map(({ label, value, suffix, icon: Icon, color, bg }, i) => (
+        {stats.map(({ label, value, suffix, icon: Icon, color, bg }) => (
           <div
             key={label}
             className="rounded-xl border border-[#1F2933] bg-[#11161C] p-4"
@@ -169,6 +171,7 @@ export default function DashboardPage() {
                   day={day}
                   index={i}
                   isActive={day.day === currentDay}
+                  isLocked={day.day >= 30}
                 />
               ))}
             </div>

@@ -1,16 +1,19 @@
 "use client";
 
-import { notFound } from "next/navigation";
-import Link from "next/link";
-import { use } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, BookOpen, CheckCircle2 } from "lucide-react";
-import { roadmap } from "@/data/roadmap";
-import { useProgressStore } from "@/store/useProgressStore";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { use } from "react";
+import { Badge } from "@/components/dsa/Badge";
+import { PatternLessonCard } from "@/components/dsa/PatternLessonCard";
 import { ProblemItem } from "@/components/dsa/ProblemItem";
 import { ProgressBar } from "@/components/dsa/ProgressBar";
-import { Badge } from "@/components/dsa/Badge";
+import { lessons } from "@/data/lessons";
+import { roadmap, totalDays } from "@/data/roadmap";
+import { dayStudyResources } from "@/data/studyResources";
 import { cn, getWeekColor } from "@/lib/utils";
+import { useProgressStore } from "@/store/useProgressStore";
 
 type Props = {
   params: Promise<{ dayId: string }>;
@@ -30,7 +33,9 @@ export default function DayPage({ params }: Props) {
   const isComplete = isDayComplete(problemIds);
 
   const prevDay = dayNum > 1 ? dayNum - 1 : null;
-  const nextDay = dayNum < 30 ? dayNum + 1 : null;
+  const nextDay = dayNum < totalDays ? dayNum + 1 : null;
+  const lesson = lessons[dayNum] ?? null;
+  const resource = dayStudyResources[dayNum] ?? null;
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-10 space-y-8">
@@ -60,7 +65,9 @@ export default function DayPage({ params }: Props) {
           <Badge className={cn("text-xs", getWeekColor(day.week))}>
             Week {day.week}
           </Badge>
-          <span className="text-xs text-[#5A6470]">Day {day.day} of 30</span>
+          <span className="text-xs text-[#5A6470]">
+            Day {day.day} of {totalDays}
+          </span>
         </div>
 
         <div className="flex items-start justify-between gap-4">
@@ -125,6 +132,16 @@ export default function DayPage({ params }: Props) {
         <p className="text-sm text-[#E6EDF3] font-medium">{day.pattern}</p>
         <p className="mt-1 text-sm text-[#9AA4AF]">{day.patternDescription}</p>
       </motion.div>
+
+      {/* Pattern lesson */}
+      {lesson && (
+        <PatternLessonCard
+          currentDay={day.day}
+          lesson={lesson}
+          patternLabel={day.pattern}
+          resource={resource}
+        />
+      )}
 
       {/* Problems */}
       <div className="space-y-2">
