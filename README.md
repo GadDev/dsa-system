@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DSA Trainer — Pattern-Based Mastery
 
-## Getting Started
+A 35-day, pattern-based system for mastering Data Structures & Algorithms. Instead of grinding random problems, each day teaches **one recognizable pattern** — the mental model, the tell-tale signs that it applies, the common mistake that trips people up, and a small set of hand-picked LeetCode problems with hints that nudge without spoiling the solution.
 
-First, run the development server:
+**Live app:** [dsa-system.vercel.app](https://dsa-system.vercel.app/dashboard)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## Why this exists
+
+Most DSA prep is either:
+- a giant unordered list of LeetCode problems, or
+- a pattern list with no guidance on *how to recognize* which pattern to reach for.
+
+DSA Trainer tries to close that gap. Every day is built around a single pattern with an explicit **recognition checklist** ("Am I waiting for the next greater value?") so that, over time, you stop pattern-matching by memory and start pattern-matching by structure.
+
+## How it's structured
+
+```
+5 weeks · 35 days · 137 problems
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Week | Focus |
+|------|-------|
+| 1 | Arrays & Two Pointers |
+| 2 | Sliding Window & HashMap |
+| 3 | Stack & Binary Search |
+| 4 | Trees & Graphs |
+| 5 | Mastery & Interview Prep (mock interviews, weakness repair, speed mode, pattern drills) |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Each week ends with a **review day** that mixes problems from that week's patterns before moving on.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Anatomy of a day
 
-## Learn More
+Every day page (`/day/[n]`) follows the same teaching structure:
 
-To learn more about Next.js, take a look at the following resources:
+1. **Pattern Focus** — a one-line mental model for the technique (e.g. *"Keep unresolved indexes in stack order so a new greater value can answer old questions immediately."*)
+2. **Pattern Checklist** — diagnostic questions to help you recognize when this pattern applies, before you've even started coding
+3. **Beginner-friendly intuition** — an analogy that makes the pattern click (e.g. framing *Daily Temperatures* as a "waiting room" problem)
+4. **How to think about it** — a numbered breakdown of the approach
+5. **Common Mistake** — the most frequent way people get this pattern wrong
+6. **Problems** — 2–4 LeetCode problems tagged by difficulty, each with a **hint** that points toward the technique without giving away the implementation
+7. **Progress tracking** — mark problems solved and move to the next day
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tech stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [Next.js](https://nextjs.org) (App Router)
+- TypeScript
+- [Biome](https://biomejs.dev) for linting/formatting
 
-## Deploy on Vercel
+## Project structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+dsa-system/
+├── public/          # static assets
+├── specs/           # pattern/day content specs
+├── src/             # application source (App Router pages, components)
+├── AGENTS.md         # agent-facing conventions for this repo
+├── CLAUDE.md          # Claude Code project instructions
+├── biome.json
+├── next.config.ts
+├── package.json
+└── tsconfig.json
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Getting started
+
+Requires Node.js and a package manager of your choice (npm, pnpm, yarn, or bun).
+
+```bash
+git clone https://github.com/GadDev/dsa-system.git
+cd dsa-system
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) — it redirects to `/dashboard`, the 35-day roadmap.
+
+## Roadmap
+
+- Days 1–29 are live (Weeks 1–4, plus the start of Week 5)
+- Days 30–35 are marked "Coming soon": Mock Interview Workflow, Weakness Repair, Speed Mode, Pattern Variations, Pattern Recognition Drill, and a final "Final Boss" mixed-pattern day
+
+## Contributing
+
+Content contributions (new day patterns, better hints, corrected problem links) and code contributions (UI, progress-tracking features) are both welcome — open an issue or PR.
+
+## License
+
+See [LICENSE](./LICENSE) if present, or open an issue to clarify licensing intent for this repo.
